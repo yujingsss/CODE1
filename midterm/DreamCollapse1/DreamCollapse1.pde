@@ -27,11 +27,14 @@ int score=0;
 int t=1800;
 int timer=60;
 int highestScore=0;
+ArrayList <Weapon> myWeapons;
 
 void setup() {
   size(800, 800);
   font = createFont("slkscr.ttf", 20);
   textFont(font);
+  myWeapons = new ArrayList<Weapon>();
+
   newBricks = new Brick();
   myPlayer = new Player();
   for (int i = 0; i < dotNum; i++) {
@@ -100,9 +103,10 @@ void mousePressed() {
     screen = 2;
   }
   if (screen==2) {
-    weapon=true;
-    myPlayer.y = myPlayer.yPos;
-    myPlayer.x = myPlayer.xPos;
+    //weapon=true;
+    myWeapons.add(new Weapon());
+    //myPlayer.y = myPlayer.yPos;
+    //myPlayer.x = myPlayer.xPos;
   }
   //println(weapon);
   if (screen==3) {
@@ -151,8 +155,25 @@ void gameScreen() {
   myPlayer.controlPlayer();
   myPlayer.brickAvoid();
   myPlayer.checkBoundaries();
-  if (weapon==true) {
-    myPlayer.drawWeapon();
+  //if (weapon==true) {
+  //myPlayer.drawWeapon();
+  for (int i=0; i<myWeapons.size(); i++) {
+    Weapon w = myWeapons.get(i);
+    w.drawWeapon();
+    w.launchWeapon();
+    if (w.yPos < 0) {
+      myWeapons.remove(i);
+    }
+    for (int j=0; j<obstacleNum; j++) {
+      if (w.yPos+5 >= newObstacles[j].yPos && w.yPos-5 <= newObstacles[j].yPos + newObstacles[j].h
+        && w.xPos+5 >= newObstacles[j].xPos && w.xPos-5 <= newObstacles[j].xPos+newObstacles[j].w) {
+        newObstacles[j]=new Obstacle();
+        bullet.play();
+        score+=10;
+        //weapon=false;
+      }
+    }
+    //}
   }
   textSize(20);
   textAlign(LEFT);
@@ -201,16 +222,16 @@ void gameScreen() {
       screen=4;
     }
     newObstacles[i].previousCollision=newObstacles[i].collision;
-    if (myPlayer.y >= newObstacles[i].yPos && myPlayer.y <= newObstacles[i].yPos+newObstacles[i].h
-      && myPlayer.x >= newObstacles[i].xPos && myPlayer.x <= newObstacles[i].xPos+newObstacles[i].w) {
-      newObstacles[i]=new Obstacle();
-      bullet.play();
-      score+=10;
-      weapon=false;
-    } 
-    if (myPlayer.y <= -5) {
-      weapon=false;
-    }
+    //if (myPlayer.y >= newObstacles[i].yPos && myPlayer.y <= newObstacles[i].yPos+newObstacles[i].h
+    //  && myPlayer.x >= newObstacles[i].xPos && myPlayer.x <= newObstacles[i].xPos+newObstacles[i].w) {
+    //  newObstacles[i]=new Obstacle();
+    //  bullet.play();
+    //  score+=10;
+    //  weapon=false;
+    //} 
+    //if (myPlayer.y <= -5) {
+    //  weapon=false;
+    //}
   }
   if (timer==0 && life>0) {
     screen=3;
