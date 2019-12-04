@@ -4,8 +4,9 @@ String welcomeMsg = "welcome to the first midterm question!";
 float []floatArray = new float[100];
 
 void setup() {
+  frameRate(4);
   // we'll create a counter variable to count the frames
-  
+
   //boolean isCodeGreat = true;
   println(welcomeMsg);
   println("now we'll do a loop and print the iterating value!");
@@ -17,10 +18,10 @@ void setup() {
 
 void draw() {
   background(0);
+  counter++;
   // we'll increment counter every frame until 60, then reset
-  if (frameCount==60) {
-    counter++;
-    frameCount=0;
-  }
+  if (frameCount % 60 == 0) {
+    counter=0;
+  } 
   text(counter, width/2, height/2);
 }
